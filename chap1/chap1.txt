@@ -217,3 +217,49 @@ String
       }
       
       
+
+
+
+********Python********
+import string:
+  string.capwords(), string.maketrans()
+    string.capwords(s) # captilize the first character of each word
+    
+    leet = string.maketrans(’abegiloprstz’, ’463611092572’)
+    s = ’The quick brown fox jumped over the lazy dog.’
+    $ print s.translate(leet)
+    Th3 qu1ck 620wn f0x jum93d 0v32 7h3 142y d06.
+    
+  string.Templates():
+    #create a tempalte
+    t=string.Templates("""$var, $$, S{var}r""")
+    #use the templates
+    values={'var':'foo'}
+    $print t.substitute(values)
+    # all var(s) will be susbsitute with value 'foo', $$ will be $, $anotherVar wont be subsititute
+    
+    OR use safe_subsititute() to avoid exception if not all values are provides for template
+    t=string.Templates("""$var, $$, S{var}, $anotherVar""")
+    values={'var':'foo'}
+    t.safe_substitute(values) will NOT throw exceptions.
+    
+    str() and repr() both create strings, their output is usually slightly different. 
+    str() produces the output that you get when you use the print statement,whereas 
+    repr() creates a string that you type into a program to exactly represent the value of an object. For example:
+    The format() function is used to convert a value to a string with a specific formatting applied. For example:
+    >>> x = 3.4
+    >>> str(x)
+    '3.4'
+    >>> repr(x)
+    '3.3999999999999999'
+    >>> format(x,"0.5f")
+    '3.40000'
+    
+    
+    
+    
+    
+    
+   
+    
+    
