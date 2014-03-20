@@ -2,3 +2,7 @@ chapter 1
 Array, string, hashtable, stringbuffer
 
 c++:
+using c++11 standard to compile code
+	g++ -std=c++11 -o execute_name cppfile
+	
+Array: http://www.cplusplus.com/doc/tutorial/arrays/
