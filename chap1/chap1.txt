@@ -6,3 +6,263 @@ using c++11 standard to compile code
 	g++ -std=c++11 -o execute_name cppfile
 	
 Array: http://www.cplusplus.com/doc/tutorial/arrays/
+String
+  <cctype> character classification operations
+  <string> strings
+  <regex> regular expression
+  <cstring> C-style strings
+  <locales> handling of different character sets, encodings and conventions
+  
+  <cctype> (<cwctype> has the equivalent functions for WIDE characters)
+    issapce(c): is c a whitespace' ', tab\t, newline\n, vertical tab\v, form feed\f, carriage return \r
+    isalpha(c): is c a letter('a' - 'z' 'A' - 'Z'). NOT underscore '_'
+    isdigit(c): is c a decimal digit('0'...'9')
+    isxdigit(c): is c hexadecimal digit ('a'...'f' or 'A'..'F")
+    isupper(c): is c an uppercase letter
+    islower(c): is c an lowercase letter
+    isalnum(c): isalpha(c) or isdigit(c)
+    iscntrl(c): is c a control character(ASCII 0..31 and 127)
+    ispunct(c): is c NOT a letter, digit, whitespace, or invisiable control character
+    isprint(c): is c pritable(ASCII )
+    isgraph(c): isalpha(c) or isdigit(c) or ispunct(c)
+    
+    toupper(c)
+    tolower(c)
+    
+  <string>  
+    C++11 internal express what is a string, string is a alias of basic_string
+      using string = basic_string<char>;
+      using u16string = basic_string<char16_t>;
+      using u32string = basic_string<char32_t>; 
+      using wstring = basic_string<wchar_t>;
+    
+  string VS C-style strings
+      string s0;                          // the empty string
+      string s1 {"As simple as that!"};   // construct from C-style string
+      string s2 {s1};                     // copy constructor
+      string s3 {7};       // error: no string(int)
+      string s4 {'a'};     // error: no string(char)
+      string s5 {7,'a'};   // OK: 7 'a's
+      string s6 {0};       //  danger: passing nullptr
+      
+      // string::npos usually means "the end of the string"
+      string ss {"Fleetwood Mac"};
+      string ss2 {ss,0,9};                // "Fleetwood"
+      string ss3 {ss,10,string::npos};    // "Mac"
+    
+      string Fundamental Operations:
+        n=ss.size(); n is the number of characters in ss
+        n=ss.length(); is equal to ss.size()
+        n=ss.max_size(); largest possible value of ss.size()
+        ss.resize(n, c); resize ss to n and append value c for new added element
+        ss.resize(n); == ss.resize(n , C{})
+        ss.reserve(n); ensure that ss can hold n characters without further allocation
+        ss.reserve(); no effect
+        n=ss.capacity(); ss can hold n characters without allocation
+        ss.shrink_to_fit(); make ss.capacity==ss.size()
+        ss.clear(); make ss empty
+        ss.empty(); return bool? is ss empty?
+        a=ss.get_allocator(); a is ss's allocator
+        
+        ss.at(i)
+        ss.front();  == ss[0]
+        ss.back(); ==ss[s.size()-1]
+        ss.push_back(c); append the character c
+        ss.pop_back()
+        s+=x;
+        s=s1+s2
+        n2=ss.copy(ss2, n, pos);  
+        n2=ss.cpy(ss2, n)
+        p=ss.c_str(); p is a C-style string version 
+        p=ss.data();  == ss.c_str()
+        ss.swap(ss2);  exchange value of ss and ss2
+        swap(ss, ss2); == ss.swap(ss2);
+        
+      string IO:
+        in>>ss; read a whiltespace-separated word into ss from inputstream in
+        out<<ss;
+        getline(in, ss, c); read characters from in into ss until character c is encountered. c is removed from in
+                            but not appended to ss
+        getline(in, ss); ==getline(in, ss, '\n')
+        
+      string Numeric conversions:
+        x=stoi(s, p, b); string to int; x is an int; read string starting from s[0]; if p!=nullptr
+                        , *p is set to the numver of characters used for x, ( *p will be an int)
+                        b is the base of the number( 2, 8, 10, 16, 32)
+        x=stoi(s,p); ==stoi(s, p, 10)
+        x=stoi(s); ==stoi(s, nullptr, 10)
+        x=stol(s,p,b); to long
+        x=stoul(s,p,b); to unsigned long
+        x=stoll(s,p,b); to long long
+        x=stoull(s,p,b); to unsigned long long
+        x=stof(s,p); to float
+        x=stod(s,p); to double
+        x=stold(s,p); to long double
+        s=to_string(x); s is the string representation of x; x must be a int or float
+        ws=to_wstring(x);
+        
+        example:
+          string ss = "123.4567801234";
+          size_t dist = 0;             // put number of characters read here
+          auto x = stoi(ss,&dist);     // x = 123 (an int)
+          ++dist;                      // ignore the dot  dist == 4
+          auto y = stoll(&ss[dist]);   // x = 4567801234 (a long long)
+          
+      STL-like Operations for string:
+        p=ss.begin(); p is an iterator to the first CHARACTER of string ss
+        p=ss.end(); p is an iterator to ONE BEYOND the end of ss
+        p=ss.cbegin(); const iterator
+        p=ss.cend(); const iterator
+        p=ss.rbegin(); reverse squence
+        p=ss.rend();
+        p=ss.crbegin();
+        p=ss.rcend();
+        
+        ss.assign(ss2); ss == ss2; ss2 can be string, C-style, or an initizlizer_list<char_type>
+        ss.assign(move(ss2)); move:ss2 is a string
+        ss.assign(s2, pos, n); s get the characters from s2 at pos:pos=N
+        ss.assign(p, n); p is a C-style string
+        ss.assign(n ,c); n copies of c
+        ss.assgin(b ,e); from begin to end
+        
+        ss.append(x); append x to ss; x can be a string, C-style character or an initizlizer_list<char_type>
+        ss.append(b, e);
+        ss.append(ss2, pos, n);
+        ss.append(p, n0);
+        ss.append(n,c );
+        
+        ss.insert(pos, x); insert x BEFORE s[pos]
+        ss.insert(p, c);  insert x BEFORE interator p
+        insert(p, b, e); insert [b:e)before p
+        
+        ss.erase(pos); remove tailing characters from ss, starting with ss[pos]
+        ss.erase(pos, n); 
+        
+        ss.replace(pos, n ss2, pos2, n2); repalce s[pos:pos+n) with ss2[pos2:pos2+n2)
+        ss.replace(pos, n, p, n2);
+        ss=ss.replace(pos, n, ss2);
+        ss.replace(pos, n, n2, c);
+        ss.replace(b,e,x)
+        ss.replace(b,e,p,n)
+        ss.replace(b,e,n,c)
+        ss.replace(b,e,b2,e2)
+        
+        example :
+          void f()
+            {
+                 string s = "but I have heard it works even if you don't believe in it";
+                 s.replace(0,4,"");                        // erase initial "but "
+                 s.replace(s.find("even"),4,"only");
+                 s.replace(s.find(" don't"),6,"");         // erase by replacing with ""
+                 assert(s=="I have heard it works only if you believe in it");
+            }
+        
+        
+      find family for string:
+        pos=ss.find(x); pos is the index of the first character found OR string:npos
+        pos=ss.find(x, pos); 
+        pos=ss.find(p,pos2,n)
+        pos=ss.rfind(x);
+        
+        pos=ss.find_first_of(x,pos); find x in ss from ss[pos]
+        pos=ss.find_first_of(x); ==ss.find_first_of(x, 0)
+        
+          fnd example:
+            string s {"accdcde"};
+            auto i1 = s.find("cd");                  // i1==2 s[2=='c' && s[3]=='d'
+            auto i2 = s.rfind("cd");                 // i2==4 s[4]=='c' && s[5]=='d'
+            auto i3 =
+            auto i4 =
+            auto i5 =
+            auto i6 =
+            s.find_first_of("cd");         // i3==1 s[1]=='c'
+            s.find_last_of("cd");          // i4==5 s[5]=='d'
+            s.find_first_not_of("cd");     // i5==0 s[0]!='c' && s[0]!='d'
+            s.find_last_not_of("cd");      // i6==6 s[6]!='c' && s[6]!='d'
+                    
+      substrings:
+        ss2=ss.substr(pos, n)
+        ss2=ss.substr(pos)
+        ss2=ss.substr()
+        
+      
+      
+      // C-Style character declaration:
+      char* c_val;  // C-style string is a POINTER to an array of zero-terminated characters.he user
+                    //controls allocation and is responsible for deallocation:
+    
+    string example:              
+        string address(const string& identifier, const string& domain)
+        {
+             return identifier + '@' + domain;
+        }
+        void test()
+        {
+             string t = address("bs","somewhere");
+             cout << t << '\n';
+        }
+        
+    C-Style example:
+      char* address(const char* identifier, const char* domain)
+      {
+           int iden_len = strlen(identifier);
+           int dom_len = strlen(domain);
+           char* addr = (char*)malloc(iden_len+dom_len+2);      // remember space for 0 and '@'
+           strcpy(identifier,addr);
+           addr[iden_len] = '@';
+           strcpy(domain,addr+iden_len+1);
+           return addr;
+      }
+      void test2()
+      {
+           char* t = address("bs","somewhere");
+           printf("%s\n",t);
+           free(t);
+      }
+      
+      
+
+
+
+********Python********
+import string:
+  string.capwords(), string.maketrans()
+    string.capwords(s) # captilize the first character of each word
+    
+    leet = string.maketrans(’abegiloprstz’, ’463611092572’)
+    s = ’The quick brown fox jumped over the lazy dog.’
+    $ print s.translate(leet)
+    Th3 qu1ck 620wn f0x jum93d 0v32 7h3 142y d06.
+    
+  string.Templates():
+    #create a tempalte
+    t=string.Templates("""$var, $$, S{var}r""")
+    #use the templates
+    values={'var':'foo'}
+    $print t.substitute(values)
+    # all var(s) will be susbsitute with value 'foo', $$ will be $, $anotherVar wont be subsititute
+    
+    OR use safe_subsititute() to avoid exception if not all values are provides for template
+    t=string.Templates("""$var, $$, S{var}, $anotherVar""")
+    values={'var':'foo'}
+    t.safe_substitute(values) will NOT throw exceptions.
+    
+    str() and repr() both create strings, their output is usually slightly different. 
+    str() produces the output that you get when you use the print statement,whereas 
+    repr() creates a string that you type into a program to exactly represent the value of an object. For example:
+    The format() function is used to convert a value to a string with a specific formatting applied. For example:
+    >>> x = 3.4
+    >>> str(x)
+    '3.4'
+    >>> repr(x)
+    '3.3999999999999999'
+    >>> format(x,"0.5f")
+    '3.40000'
+    
+    
+    
+    
+    
+    
+   
+    
